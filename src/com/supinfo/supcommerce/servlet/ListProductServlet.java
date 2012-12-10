@@ -4,6 +4,7 @@ import com.supinfo.sun.supcommerce.bo.SupProduct;
 import com.supinfo.sun.supcommerce.doa.SupProductDao;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +15,7 @@ import java.util.List;
 /**
  * @author Antoine Rouaze <antoine.rouaze@zenika.com>
  */
+@WebServlet(name = "listProducts", urlPatterns = "/listProducts")
 public class ListProductServlet extends HttpServlet {
 
     @Override

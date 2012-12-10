@@ -1,6 +1,6 @@
 <%--
   Created by IntelliJ IDEA.
-  User: Dmitry.Avdeev
+  User: Antoine Rouaze <antoine.rouaze@zenika.com>
   Date: 10/2/12
   Time: 5:09 PM
   To change this template use File | Settings | File Templates.

@@ -4,5 +4,28 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 		  http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          version="2.5">
-
+    <servlet>
+        <servlet-name>basicInsert</servlet-name>
+        <servlet-class>com.supinfo.supcommerce.servlet.InsertSomeProductServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>listProducts</servlet-name>
+        <servlet-class>com.supinfo.supcommerce.servlet.ListProductServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>showProduct</servlet-name>
+        <servlet-class>com.supinfo.supcommerce.servlet.ShowProductServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>basicInsert</servlet-name>
+        <url-pattern>/basicInsert</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>listProducts</servlet-name>
+        <url-pattern>/listProducts</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>showProduct</servlet-name>
+        <url-pattern>/showProduct</url-pattern>
+    </servlet-mapping>
 </web-app>

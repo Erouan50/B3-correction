@@ -16,10 +16,15 @@
 <body>
 <%@ include file="/header.jsp" %>
 <h1>List products</h1>
+
 <% List<SupProduct> products = SupProductDao.getAllProducts();
     for (SupProduct product : products) {
 %>
-<%= product.getId()%>:<%= product.getName()%><br/>
+<form method="post" action="${pageContext.servletContext.contextPath}/auth/removeProduct">
+    <input type="submit" value="Remove"><%= product.getId()%>:<%= product.getName()%><br/><input name="id" id="id"
+                                                                                                 type="hidden"
+                                                                                                 value="<%= product.getId()%>">
+</form>
 <%
     }
 %>

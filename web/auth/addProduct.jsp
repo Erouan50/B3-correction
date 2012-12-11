@@ -12,7 +12,7 @@
 </head>
 <body>
 <%@ include file="/header.jsp" %>
-<form method="post" action="<%= request.getContextPath()%>/auth/addProduct">
+<form method="post" action="${pageContext.servletContext.contextPath}/auth/addProduct">
     Name: <input type="text" id="name" name="name"/><br/>
     Content: <input type="text" id="content" name="content"><br/>
     Price: <input type="text" id="price" name="price"><br/>

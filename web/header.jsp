@@ -6,16 +6,13 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<a href="<%= request.getContextPath()%>/listProducts.jsp">List Products</a>
-<%
-    if (session != null && session.getAttribute("username") != null && !((String) session.getAttribute("username")).isEmpty()) {
-%>
-<a href="<%= request.getContextPath()%>/auth/addProduct.jsp">Add product</a>
-<a href="<%= request.getContextPath()%>/logout">Logout</a>
-<%
-} else {
-%>
-<a href="<%= request.getContextPath()%>/login.html">Login</a>
-<%
-    }
-%>
+<a href="${pageContext.servletContext.contextPath}/listProducts">List Products</a>
+<c:choose>
+    <c:when test="${!empty sessionScope.username}">
+        <a href="${pageContext.servletContext.contextPath}/auth/addProduct">Add product</a>
+        <a href="${pageContext.servletContext.contextPath}/logout">Logout</a>
+    </c:when>
+    <c:when test="${empty sessionScope.username}">
+        <a href="${pageContext.servletContext.contextPath}/login">Login</a>
+    </c:when>
+</c:choose>

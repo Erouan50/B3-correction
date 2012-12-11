@@ -30,7 +30,7 @@ public class AuthenticateFilter implements Filter {
         if (session != null && session.getAttribute("username") != null && !((String) session.getAttribute("username")).isEmpty()) {
             filterChain.doFilter(httpServletRequest, httpServletResponse);
         } else {
-            httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/login.html");
+            httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/login");
         }
     }
 

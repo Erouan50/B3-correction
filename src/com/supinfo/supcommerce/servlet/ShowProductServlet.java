@@ -1,10 +1,9 @@
 package com.supinfo.supcommerce.servlet;
 
+import com.supinfo.supcommerce.dao.DaoFactory;
+import com.supinfo.supcommerce.dao.ProductDao;
 import com.supinfo.supcommerce.entity.Product;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,23 +18,11 @@ import java.io.IOException;
 @WebServlet(name = "showProduct", urlPatterns = "/showProduct")
 public class ShowProductServlet extends HttpServlet {
 
-    private EntityManagerFactory emf;
-
-    @Override
-    public void destroy() {
-        emf.close();
-    }
-
-    @Override
-    public void init() throws ServletException {
-        emf = Persistence.createEntityManagerFactory("supcommerce-PU");
-    }
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");
-        EntityManager em = emf.createEntityManager();
-        Product product = em.find(Product.class, Long.valueOf(id));
+        ProductDao productDao = DaoFactory.getProductDao();
+        Product product = productDao.getById(Long.valueOf(id));
         req.setAttribute("product", product);
         RequestDispatcher rd = req.getRequestDispatcher("/showProduct.jsp");
         rd.forward(req, resp);

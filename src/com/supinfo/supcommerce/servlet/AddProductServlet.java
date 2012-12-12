@@ -1,13 +1,11 @@
 package com.supinfo.supcommerce.servlet;
 
+import com.supinfo.supcommerce.dao.CategoryDao;
+import com.supinfo.supcommerce.dao.DaoFactory;
+import com.supinfo.supcommerce.dao.ProductDao;
 import com.supinfo.supcommerce.entity.Category;
 import com.supinfo.supcommerce.entity.Product;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-import javax.persistence.Query;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -27,23 +24,11 @@ public class AddProductServlet extends HttpServlet {
 
     private static final Logger log = Logger.getLogger(AddProductServlet.class.getName());
 
-    private EntityManagerFactory emf;
-
-    @Override
-    public void destroy() {
-        emf.close();
-    }
-
-    @Override
-    public void init() throws ServletException {
-        emf = Persistence.createEntityManagerFactory("supcommerce-PU");
-    }
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        EntityManager em = emf.createEntityManager();
-        Query query = em.createNamedQuery("findAllCategory");
-        List<Category> categories = query.getResultList();
+
+        CategoryDao categoryDao = DaoFactory.getCategoryDao();
+        List<Category> categories = categoryDao.getAll();
         req.setAttribute("categories", categories);
         RequestDispatcher rd = req.getRequestDispatcher("/auth/addProduct.jsp");
         rd.forward(req, resp);
@@ -56,24 +41,13 @@ public class AddProductServlet extends HttpServlet {
         product.setContent(req.getParameter("content"));
         product.setPrice(Float.parseFloat(req.getParameter("price")));
 
-        EntityManager em = emf.createEntityManager();
-        Long idCategory = Long.valueOf(req.getParameter("idCategory"));
-        Category category = em.find(Category.class, idCategory);
+        CategoryDao categoryDao = DaoFactory.getCategoryDao();
+        Category category = categoryDao.getById(Long.valueOf(req.getParameter("idCategory")));
         product.setCategory(category);
 
-        EntityTransaction tx = em.getTransaction();
-        try {
-            tx.begin();
-            em.persist(product);
-            tx.commit();
-        } catch (Exception e) {
-            log.log(Level.SEVERE, "Unable to persist product", e);
-        } finally {
-            if (tx.isActive()) {
-                tx.rollback();
-            }
-            em.close();
-        }
+        ProductDao productDao = DaoFactory.getProductDao();
+        productDao.save(product);
+
         resp.sendRedirect(getServletContext().getContextPath() + "/showProduct?id=" + product.getId());
     }
 }

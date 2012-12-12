@@ -18,8 +18,8 @@ import java.util.List;
 /**
  * @author Antoine Rouaze <antoine.rouaze@zenika.com>
  */
-@WebServlet(name = "listProducts", urlPatterns = "/listProducts")
-public class ListProductServlet extends HttpServlet {
+@WebServlet(name = "cheaperProducts", urlPatterns = "/cheaperProducts")
+public class CheaperProductServlet extends HttpServlet {
 
     private EntityManagerFactory emf;
 
@@ -35,8 +35,9 @@ public class ListProductServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        EntityManager entityManager = emf.createEntityManager();
-        Query query = entityManager.createNamedQuery("findAllProducts");
+        EntityManager em = emf.createEntityManager();
+        Query query = em.createNamedQuery("findProductsWithPriceRaiseOf");
+        query.setParameter("max", 100F);
         List<Product> products = query.getResultList();
         req.setAttribute("products", products);
         RequestDispatcher rd = req.getRequestDispatcher("/listProducts.jsp");

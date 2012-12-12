@@ -17,6 +17,7 @@ Id: ${product.id}<br/>
 Name: ${product.name}<br/>
 Content: ${product.content}<br/>
 Price: ${product.price}
+Category: ${product.category.name}
 <%@include file="/footer.jsp" %>
 </body>
 </html>

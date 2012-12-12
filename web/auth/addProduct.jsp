@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: Antoine Rouaze <antoine.rouaze@zenika.com>
@@ -16,6 +17,11 @@
     Name: <input type="text" id="name" name="name"/><br/>
     Content: <input type="text" id="content" name="content"><br/>
     Price: <input type="text" id="price" name="price"><br/>
+    Category: <select id="idCategory" name="idCategory">
+    <c:forEach items="${categories}" var="category">
+        <option value="${category.id}">${category.name}</option>
+    </c:forEach>
+</select>
     <input type="submit" value="Submit">
 </form>
 <%@include file="/footer.jsp" %>

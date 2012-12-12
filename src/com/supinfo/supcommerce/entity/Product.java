@@ -6,6 +6,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -13,6 +15,10 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "PRODUCTS")
+@NamedQueries({
+        @NamedQuery(name = "findAllProducts", query = "SELECT product FROM Product AS product"),
+        @NamedQuery(name = "findProductsWithPriceRaiseOf", query = "SELECT product FROM Product AS product WHERE product.price < :max")
+})
 public class Product {
 
     @Id

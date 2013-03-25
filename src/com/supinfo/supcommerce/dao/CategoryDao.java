@@ -13,4 +13,8 @@ public interface CategoryDao {
     Category getById(Long idCategory);
 
     List<Category> getAll();
+
+    Category getWithProduct(Long id);
+
+    void updateCategory(Category category);
 }

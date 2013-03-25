@@ -8,6 +8,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlID;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
 /**
@@ -16,8 +18,10 @@ import java.util.List;
 @Entity
 @Table(name = "CATEGORIES")
 @NamedQueries({
-        @NamedQuery(name = "findAllCategory", query = "SELECT category FROM Category AS category")
+        @NamedQuery(name = "findAllCategory", query = "SELECT category FROM Category AS category"),
+        @NamedQuery(name = "findByIdWithProduct", query = "SELECT category FROM Category AS category LEFT JOIN FETCH category.products WHERE category.id = :id")
 })
+@XmlRootElement
 public class Category {
 
     @Id
@@ -51,5 +55,10 @@ public class Category {
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    @XmlID
+    public String getIdRef() {
+        return String.valueOf(id);
     }
 }

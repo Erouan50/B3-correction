@@ -53,4 +53,30 @@ public class CategoryDaoJpa implements CategoryDao {
         Query query = em.createNamedQuery("findAllCategory");
         return query.getResultList();
     }
+
+    @Override
+    public Category getWithProduct(Long id) {
+        EntityManager em = emf.createEntityManager();
+        Query query = em.createNamedQuery("findByIdWithProduct");
+        query.setParameter("id", id);
+        return (Category) query.getSingleResult();
+    }
+
+    @Override
+    public void updateCategory(Category category) {
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            em.merge(category);
+            tx.commit();
+        } catch (Exception e) {
+            log.log(Level.SEVERE, "Category adding fail !", e);
+        } finally {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            em.close();
+        }
+    }
 }

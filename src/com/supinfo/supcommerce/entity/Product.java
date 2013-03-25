@@ -9,6 +9,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlIDREF;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * @author Antoine Rouaze <antoine.rouaze@zenika.com>
@@ -19,6 +22,7 @@ import javax.persistence.Table;
         @NamedQuery(name = "findAllProducts", query = "SELECT product FROM Product AS product"),
         @NamedQuery(name = "findProductsWithPriceRaiseOf", query = "SELECT product FROM Product AS product WHERE product.price < :max")
 })
+@XmlRootElement
 public class Product {
 
     @Id
@@ -29,6 +33,7 @@ public class Product {
     private Float price;
 
     @ManyToOne
+    @XmlIDREF
     @JoinColumn(name = "category_fk")
     private Category category;
 
@@ -64,6 +69,7 @@ public class Product {
         this.price = price;
     }
 
+    @XmlTransient
     public Category getCategory() {
         return category;
     }

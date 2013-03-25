@@ -31,7 +31,6 @@ public class AddCategoryServlet extends HttpServlet {
 
         CategoryDao categoryDao = DaoFactory.getCategoryDao();
         categoryDao.save(category);
-
         resp.sendRedirect(getServletContext().getContextPath() + "/listProducts");
     }
 }

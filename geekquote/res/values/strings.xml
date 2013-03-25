@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">QuoteListActivity</string>
+    <string-array name="strQuotes">
+        <item>Quote 1</item>
+        <item>Quote 2</item>
+        <item>Quote 3</item>
+        <item>Quote 4</item>
+        <item>Quote 5</item>
+    </string-array>
+</resources>

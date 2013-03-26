@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--suppress AndroidLintButtonCase -->
 <resources>
     <string name="app_name">QuoteListActivity</string>
+    <string name="ok_quote_activity">Ok</string>
+    <string name="cancel_quote_activity">Cancel</string>
+    <string name="cancel_message">Modification canceled</string>
+    <string name="title_quote_edit">Edit quote</string>
+    <string name="ok_quote_edit">Ok</string>
+    <string name="cancel_quote_edit">Cancel</string>
     <string-array name="strQuotes">
         <item>Quote 1</item>
         <item>Quote 2</item>

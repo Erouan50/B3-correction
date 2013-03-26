@@ -1,11 +1,12 @@
 package com.supinfo.geekquote.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author Antoine Rouaze <antoine.rouaze@zenika.com>
  */
-public class Quote {
+public class Quote implements Serializable {
 
     private String strQuote;
     private int rating;

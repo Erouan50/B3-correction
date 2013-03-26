@@ -1,4 +1,4 @@
-package com.supinfo.geekquote;
+package com.supinfo.geekquote.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

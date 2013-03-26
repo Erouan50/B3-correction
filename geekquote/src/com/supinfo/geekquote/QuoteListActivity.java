@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.supinfo.geekquote.model.Quote;
@@ -27,6 +26,11 @@ public class QuoteListActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        final QuoteListAdapter adapter = new QuoteListAdapter(this, android.R.layout.simple_list_item_1, quotes);
+        quoteList = (ListView) findViewById(R.id.quoteList);
+        quoteList.setAdapter(adapter);
+
+
         Button button = (Button) findViewById(R.id.quoteButton);
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -34,14 +38,11 @@ public class QuoteListActivity extends Activity {
             public void onClick(View view) {
                 TextView textView = (TextView) findViewById(R.id.quoteText);
                 addQuote(String.valueOf(textView.getText()));
+                adapter.notifyDataSetChanged();
                 textView.setText("");
             }
         });
 
-        ListAdapter adapter = new QuoteListAdapter(this, android.R.layout.simple_list_item_1, quotes);
-        quoteList = (ListView) findViewById(R.id.quoteList);
-        quoteList.setAdapter(adapter);
-//
         String[] strQuotes = getResources().getStringArray(R.array.strQuotes);
         for (String strQuote : strQuotes) {
             addQuote(strQuote);

@@ -3,12 +3,28 @@
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
+              android:id="@+id/layout"
         >
 
-    <TextView
-            android:layout_width="fill_parent"
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Hello World, QuoteListActivity"
-            />
+            android:layout_gravity="center_vertical">
+
+        <EditText
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/quoteText"
+                android:layout_gravity="right|top"/>
+
+        <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add quote"
+                android:id="@+id/quoteButton"
+                android:layout_gravity="right|top"/>
+
+    </LinearLayout>
 </LinearLayout>
 

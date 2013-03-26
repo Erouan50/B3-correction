@@ -3,6 +3,8 @@ package com.supinfo.geekquote;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import com.supinfo.geekquote.model.Quote;
 
 import java.util.ArrayList;
@@ -33,5 +35,15 @@ public class QuoteListActivity extends Activity {
         quote.setRating(0);
         quote.setCreationDate(new Date());
         quotes.add(quote);
+
+        TextView textView = new TextView(this);
+        textView.setText(quote.getStrQuote());
+        if (quotes.indexOf(quote) % 2 == 0) {
+            textView.setBackgroundColor(getResources().getColor(android.R.color.background_dark));
+        } else {
+            textView.setBackgroundColor(getResources().getColor(android.R.color.background_light));
+        }
+        LinearLayout layout = (LinearLayout) findViewById(R.id.layout);
+        layout.addView(textView);
     }
 }

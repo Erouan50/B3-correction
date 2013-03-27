@@ -14,6 +14,7 @@ import com.supinfo.geekquote.adapter.QuoteListAdapter;
 import com.supinfo.geekquote.dialog.EditQuoteDialog;
 import com.supinfo.geekquote.model.Quote;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -45,11 +46,11 @@ public class QuoteListActivity extends Activity {
         quoteList.setAdapter(quoteAdapter);
         quoteList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int index, long id) {
                 Intent intent = new Intent(QuoteListActivity.this, QuoteActivity.class);
-                Quote quote = quoteAdapter.getItem(i);
+                Quote quote = quoteAdapter.getItem(index);
                 intent.putExtra(QUOTE_INTENT_PARAMETER, quote);
-                intent.putExtra(QUOTE_INDEX_INDENT_PARAMETER, i);
+                intent.putExtra(QUOTE_INDEX_INDENT_PARAMETER, index);
                 startActivityForResult(intent, QUOTE_ACTIVITY);
             }
         });
@@ -125,4 +126,16 @@ public class QuoteListActivity extends Activity {
         }
     }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        quotes = (List<Quote>) savedInstanceState.getSerializable(QUOTE_INTENT_PARAMETER);
+        initAdapter();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(QUOTE_INTENT_PARAMETER, (Serializable) quotes);
+        super.onSaveInstanceState(outState);
+    }
 }

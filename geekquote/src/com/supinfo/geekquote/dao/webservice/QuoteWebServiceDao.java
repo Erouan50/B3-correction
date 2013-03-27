@@ -1,6 +1,8 @@
 package com.supinfo.geekquote.dao.webservice;
 
 import android.util.Log;
+import com.supinfo.geekquote.R;
+import com.supinfo.geekquote.application.QuoteApplication;
 import com.supinfo.geekquote.dao.QuoteDao;
 import com.supinfo.geekquote.model.Quote;
 import org.apache.http.HttpResponse;
@@ -34,10 +36,11 @@ import static com.supinfo.geekquote.dao.sql.QuoteSQLHelper.QUOTE_STR_QUOTE_COLUM
  */
 public class QuoteWebServiceDao implements QuoteDao {
 
-    private static final String URL = "http://10.19.19.162:8080/resources/quotes";
+    private final String url = QuoteApplication.getApplicationResources().getString(R.string.web_service_url);
     private static final String DATE_FORMAT = "dd/MM/yyyy";
     private static final String LOG_TAG = "GeekQuote";
     private DateFormat dateFormat;
+
 
     public QuoteWebServiceDao() {
         dateFormat = new SimpleDateFormat(DATE_FORMAT);
@@ -46,7 +49,7 @@ public class QuoteWebServiceDao implements QuoteDao {
     public void insertQuote(Quote quote) {
         try {
             HttpClient client = new DefaultHttpClient();
-            HttpPost post = new HttpPost(URL);
+            HttpPost post = new HttpPost(url);
             post.setEntity(new StringEntity(convertQuoteIntoJson(quote).toString()));
             post.setHeader("Content-type", "application/json");
             HttpResponse response = client.execute(post);
@@ -64,7 +67,7 @@ public class QuoteWebServiceDao implements QuoteDao {
     public void updateQuote(Quote quote) {
         try {
             HttpClient client = new DefaultHttpClient();
-            HttpPut put = new HttpPut(URL);
+            HttpPut put = new HttpPut(url);
             put.setHeader("Content-type", "application/json");
             put.setEntity(new StringEntity(convertQuoteIntoJson(quote).toString()));
             client.execute(put);
@@ -82,19 +85,21 @@ public class QuoteWebServiceDao implements QuoteDao {
     public List<Quote> getAllQuotes() {
         try {
             HttpClient client = new DefaultHttpClient();
-            HttpGet get = new HttpGet(URL);
+            HttpGet get = new HttpGet(url);
             get.setHeader("Accept", "application/json");
             HttpResponse response = client.execute(get);
             String responseStr = EntityUtils.toString(response.getEntity());
 
             List<Quote> quotes = new ArrayList<Quote>();
-            JSONObject quotesObject = new JSONObject(responseStr);
-            if (quotesObject.get("quote") instanceof JSONObject) {
-                computeJsonObject(quotes, quotesObject);
-            } else if (quotesObject.get("quote") instanceof JSONArray) {
-                computeJsonArray(quotes, quotesObject);
-            } else {
-                Log.e(LOG_TAG, "Unable to parse Json");
+            if (responseStr != null && !responseStr.isEmpty() && !responseStr.equals("null")) {
+                JSONObject quotesObject = new JSONObject(responseStr);
+                if (quotesObject.get("quote") instanceof JSONArray) {
+                    computeJsonArray(quotes, quotesObject);
+                } else if (quotesObject.get("quote") instanceof JSONObject) {
+                    computeJsonObject(quotes, quotesObject.getJSONObject("quote"));
+                } else {
+                    Log.e(LOG_TAG, "Unable to parse Json");
+                }
             }
             return quotes;
         } catch (IOException e) {
@@ -108,15 +113,14 @@ public class QuoteWebServiceDao implements QuoteDao {
     }
 
     private void computeJsonObject(List<Quote> quotes, JSONObject quotesObject) throws JSONException, ParseException {
-        JSONObject singleQuoteJson = quotesObject.getJSONObject("quote");
-        Quote quote = convertJsonIntoString(singleQuoteJson);
+        Quote quote = convertJsonIntoString(quotesObject);
         quotes.add(quote);
     }
 
     private void computeJsonArray(List<Quote> quotes, JSONObject quotesObject) throws JSONException, ParseException {
         JSONArray quotesArray = quotesObject.getJSONArray("quote");
         for (int i = 0; i < quotesArray.length(); i++) {
-            computeJsonObject(quotes, quotesObject);
+            computeJsonObject(quotes, quotesArray.getJSONObject(i));
         }
     }
 

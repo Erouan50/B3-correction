@@ -48,6 +48,7 @@ public class CategoryDaoJpa implements CategoryDao {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<Category> getAll() {
         EntityManager em = emf.createEntityManager();
         Query query = em.createNamedQuery("findAllCategory");

@@ -1,4 +1,4 @@
-package com.supinfo.geekquote.dao;
+package com.supinfo.geekquote.dao.sql;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

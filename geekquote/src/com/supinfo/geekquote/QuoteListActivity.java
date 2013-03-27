@@ -11,10 +11,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.supinfo.geekquote.adapter.QuoteListAdapter;
-import com.supinfo.geekquote.dao.QuoteSQLHelper;
 import com.supinfo.geekquote.dialog.EditQuoteDialog;
-import com.supinfo.geekquote.manager.QuoteManager;
 import com.supinfo.geekquote.model.Quote;
+import com.supinfo.geekquote.services.QuoteService;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ public class QuoteListActivity extends Activity {
     private static final int QUOTE_ACTIVITY = 1;
     private List<Quote> quotes = new ArrayList<Quote>();
     private QuoteListAdapter quoteAdapter;
-    private QuoteManager quoteManager;
+    private QuoteService quoteService;
 
     /**
      * Called when the activity is first created.
@@ -37,11 +36,8 @@ public class QuoteListActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quote_list);
-
-        QuoteSQLHelper sqlHelper = new QuoteSQLHelper(this);
-        quoteManager = new QuoteManager(sqlHelper);
-        quotes = quoteManager.getAllQuotes();
-
+        quoteService = new QuoteService();
+        quotes = quoteService.getAllQuotes();
         initAdapter();
         initButton();
     }
@@ -67,7 +63,7 @@ public class QuoteListActivity extends Activity {
                 DialogFragment dialogFragment = new EditQuoteDialog(quote, new EditQuoteDialog.EditQuoteListener() {
                     @Override
                     public void editedQuote(Quote quote) {
-                        quoteManager.updateQuote(quote);
+                        quoteService.updateQuote(quote);
                         quoteAdapter.notifyDataSetChanged();
                     }
                 });
@@ -95,7 +91,7 @@ public class QuoteListActivity extends Activity {
         quote.setStrQuote(strQuote);
         quote.setRating(0);
         quote.setCreationDate(new Date());
-        quoteManager.insertQuote(quote);
+        quoteService.addQuote(quote);
         quotes.add(quote);
         quoteAdapter.notifyDataSetChanged();
     }
@@ -118,7 +114,7 @@ public class QuoteListActivity extends Activity {
                 Quote quote = (Quote) bundle.getSerializable(QUOTE_INTENT_PARAMETER);
                 int quoteIndex = bundle.getInt(QUOTE_INDEX_INDENT_PARAMETER);
                 quotes.set(quoteIndex, quote);
-                quoteManager.updateQuote(quote);
+                quoteService.updateQuote(quote);
                 quoteAdapter.notifyDataSetChanged();
                 break;
             case QuoteActivity.RESULT_CANCELED:
@@ -130,6 +126,7 @@ public class QuoteListActivity extends Activity {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         quotes = (List<Quote>) savedInstanceState.getSerializable(QUOTE_INTENT_PARAMETER);

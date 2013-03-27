@@ -16,6 +16,7 @@ import com.supinfo.geekquote.model.Quote;
 public class EditQuoteDialog extends DialogFragment {
 
     private Quote quote;
+
     public EditQuoteListener editQuoteListener;
 
     public EditQuoteDialog(Quote quote, EditQuoteListener editQuoteListener) {
@@ -35,7 +36,7 @@ public class EditQuoteDialog extends DialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         TextView quoteEditText = (TextView) EditQuoteDialog.this.getDialog().findViewById(R.id.quoteEditText);
                         quote.setStrQuote(String.valueOf(quoteEditText.getText()));
-                        editQuoteListener.editedQuote();
+                        editQuoteListener.editedQuote(quote);
                         dialogInterface.dismiss();
                     }
                 })
@@ -56,6 +57,6 @@ public class EditQuoteDialog extends DialogFragment {
     }
 
     public interface EditQuoteListener {
-        void editedQuote();
+        void editedQuote(Quote quote);
     }
 }

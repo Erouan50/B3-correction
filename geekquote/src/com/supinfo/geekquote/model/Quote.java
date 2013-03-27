@@ -11,6 +11,7 @@ public class Quote implements Serializable {
     private String strQuote;
     private int rating;
     private Date creationDate;
+    private Long id;
 
     public String getStrQuote() {
         return strQuote;
@@ -65,5 +66,13 @@ public class Quote implements Serializable {
                 ", rating=" + rating +
                 ", creationDate=" + creationDate +
                 '}';
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

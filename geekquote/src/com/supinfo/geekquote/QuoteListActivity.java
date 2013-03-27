@@ -11,7 +11,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.supinfo.geekquote.adapter.QuoteListAdapter;
+import com.supinfo.geekquote.dao.QuoteSQLHelper;
 import com.supinfo.geekquote.dialog.EditQuoteDialog;
+import com.supinfo.geekquote.manager.QuoteManager;
 import com.supinfo.geekquote.model.Quote;
 
 import java.io.Serializable;
@@ -26,6 +28,7 @@ public class QuoteListActivity extends Activity {
     private static final int QUOTE_ACTIVITY = 1;
     private List<Quote> quotes = new ArrayList<Quote>();
     private QuoteListAdapter quoteAdapter;
+    private QuoteManager quoteManager;
 
     /**
      * Called when the activity is first created.
@@ -35,9 +38,12 @@ public class QuoteListActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quote_list);
 
+        QuoteSQLHelper sqlHelper = new QuoteSQLHelper(this);
+        quoteManager = new QuoteManager(sqlHelper);
+        quotes = quoteManager.getAllQuotes();
+
         initAdapter();
         initButton();
-        initQuoteList();
     }
 
     private void initAdapter() {
@@ -60,7 +66,8 @@ public class QuoteListActivity extends Activity {
                 Quote quote = quotes.get(i);
                 DialogFragment dialogFragment = new EditQuoteDialog(quote, new EditQuoteDialog.EditQuoteListener() {
                     @Override
-                    public void editedQuote() {
+                    public void editedQuote(Quote quote) {
+                        quoteManager.updateQuote(quote);
                         quoteAdapter.notifyDataSetChanged();
                     }
                 });
@@ -78,17 +85,9 @@ public class QuoteListActivity extends Activity {
             public void onClick(View view) {
                 TextView textView = (TextView) findViewById(R.id.quoteText);
                 addQuote(String.valueOf(textView.getText()));
-                quoteAdapter.notifyDataSetChanged();
                 textView.setText("");
             }
         });
-    }
-
-    private void initQuoteList() {
-        String[] strQuotes = getResources().getStringArray(R.array.strQuotes);
-        for (String strQuote : strQuotes) {
-            addQuote(strQuote);
-        }
     }
 
     private void addQuote(String strQuote) {
@@ -96,7 +95,9 @@ public class QuoteListActivity extends Activity {
         quote.setStrQuote(strQuote);
         quote.setRating(0);
         quote.setCreationDate(new Date());
+        quoteManager.insertQuote(quote);
         quotes.add(quote);
+        quoteAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -117,6 +118,8 @@ public class QuoteListActivity extends Activity {
                 Quote quote = (Quote) bundle.getSerializable(QUOTE_INTENT_PARAMETER);
                 int quoteIndex = bundle.getInt(QUOTE_INDEX_INDENT_PARAMETER);
                 quotes.set(quoteIndex, quote);
+                quoteManager.updateQuote(quote);
+                quoteAdapter.notifyDataSetChanged();
                 break;
             case QuoteActivity.RESULT_CANCELED:
                 Toast.makeText(this, R.string.cancel_message, 1000).show();
